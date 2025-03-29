@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,
 								initial-scale=1.0">
-	<title>Paint App</title>
+	<title>LittleDude</title>
 	<!-- Bootstrap CSS -->
 	<link href=
 "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,18 +41,20 @@
 		}
 
 		.Menu {
-			width: 100%;
+			width: 80%;
 			max-width: 100vw;
 			/* Ensure the width doesn't
 			exceed the viewport width */
 			height: 50px;
 			display: flex;
+
+			grid-template-columns: max-content max-content;
 			justify-content: space-evenly;
 			border-radius: 5px;
 			align-items: center;
 			background-color: #a3a3a32d;
 			margin: auto;
-			margin-top: 10px;
+
 			overflow-x: hidden;
 			/* Hide horizontal scrollbar */
 		}
@@ -72,16 +74,17 @@
 
 <body>
 	<div class="App">
-		<h1>Paint App</h1>
-		<div class="draw-area">
-			<div class="Menu">
-				<label>Brush Color </label>
+		<h1>Make Your Guy</h1>
+		<div class="Menu">
+				<label>Brush Color (Change this to white to erase!) </label>
 				<input type="color" id="brushColor">
+				<input type="button" id="erase" value="Clear Canvas">
 				<label>Brush Width </label>
 				<input type="range" id="brushWidth" min="3" max="20">
 				<label>Brush Opacity</label>
 				<input type="range" id="brushOpacity" min="1" max="100">
 			</div>
+		<div class="draw-area">
 			<canvas id="canvas" width="1280" height="720"></canvas>
 		</div>
         <button id="save" onclick="save()">Save</button>
@@ -96,16 +99,22 @@
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			const canvas = document.getElementById('canvas');
-			const ctx = canvas.getContext('2d');
+			let ctx = canvas.getContext('2d');
 			const brushColor = document.getElementById('brushColor');
 			const brushWidth = document.getElementById('brushWidth');
 			const brushOpacity = document.getElementById('brushOpacity');
+			const button = document.getElementById("erase")
 
 			let isDrawing = false;
 
 			canvas.addEventListener('mousedown', startDrawing);
 			canvas.addEventListener('mouseup', endDrawing);
 			canvas.addEventListener('mousemove', draw);
+			button.addEventListener('click', eraser)
+
+			function eraser() {
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+			}
 
 			function startDrawing(e) {
 				ctx.beginPath();
@@ -136,7 +145,6 @@
 
 			// $.post("/", { save_fname: filename, save_cdata: data, save_image: image });
 			// alert(filename + " saved");
-
 		}
 	</script>
 </body>
