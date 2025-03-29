@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load django_bootstrap5 %}
+{% bootstrap_css %} {% bootstrap_javascript %} {% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+    </head>
+    <body>
+        Little Dude
+        <ul>
+            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'account_login' %}">Log In</a></li>
+            <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
+        </ul>
+    </body>
+</html>
