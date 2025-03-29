@@ -76,9 +76,10 @@
 	<div class="App">
 		<h1>Make Your Guy</h1>
 		<div class="Menu">
-				<label>Brush Color (Change this to white to erase!) </label>
+				<label>Brush Color </label>
 				<input type="color" id="brushColor">
-				<input type="button" id="erase" value="Clear Canvas">
+				<input type="button" id="eraser" value="Eraser">
+				<input type="button" id="clear" value="Clear Canvas">
 				<label>Brush Width </label>
 				<input type="range" id="brushWidth" min="3" max="20">
 				<label>Brush Opacity</label>
@@ -103,16 +104,22 @@
 			const brushColor = document.getElementById('brushColor');
 			const brushWidth = document.getElementById('brushWidth');
 			const brushOpacity = document.getElementById('brushOpacity');
-			const button = document.getElementById("erase")
+			const clearButton = document.getElementById("clear")
+			const eraserButton = document.getElementById("eraser")
 
 			let isDrawing = false;
 
 			canvas.addEventListener('mousedown', startDrawing);
 			canvas.addEventListener('mouseup', endDrawing);
 			canvas.addEventListener('mousemove', draw);
-			button.addEventListener('click', eraser)
+			clearButton.addEventListener('click', clear)
+			eraserButton.addEventListener('click', eraser);
 
 			function eraser() {
+				document.getElementById('brushColor').value = "#ffffff"
+			}
+
+			function clear() {
 				ctx.clearRect(0,0,canvas.width,canvas.height);
 			}
 
