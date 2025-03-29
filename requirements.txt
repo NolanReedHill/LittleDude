@@ -1,1 +1,1 @@
-Djangogi
+Django
