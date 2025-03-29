@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "allauth.account",
     "Dude",
     "django_bootstrap5",
+    "yapper",
+    "google.genai",
 ]
 
 MIDDLEWARE = [

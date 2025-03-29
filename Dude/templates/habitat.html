@@ -8,6 +8,30 @@
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
     </head>
     <body>
-        {{ littleDude.name }}
+        name: {{ littleDude.name }}
+        <div class="row">
+            <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt">
+            <button class="btn btn-primary" id="submitQuery">Submit</button>
+            <h1 id="response"></h1>
+        </div>
+
+        <script>
+            let button = document.getElementById("submitQuery");
+            button.addEventListener("click", function () {
+                let prompt = document.getElementById("prompt").value;
+                const response = fetch("submit-query", {
+                    method: "POST",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ prompt: prompt,})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("response").innerText = data || "No response";
+                        })
+                .catch(error => console.error("Error:", error));
+            })
+        </script>
     </body>
 </html>

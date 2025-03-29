@@ -10,4 +10,5 @@ urlpatterns = [
     path("home", views.main_page, name="home"),
     path("habitat", views.habitat, name="habitat"),
     path("creation", views.creation, name="creation"),
+    path("submit-query", views.submitQuery, name="submit-query"),
 ]
