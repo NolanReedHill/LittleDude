@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
-from .models import LittleDude
+from .models import LittleDude, CreateLittleDudeForm
 
 #landing page
 def index(request):
@@ -26,11 +26,10 @@ def habitat(request):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
     
-    little_dude = LittleDude.objects.filter(user_id=user.id)
-    if not little_dude:
+    littleDude = LittleDude.objects.filter(user_id=user.id)
+    if not littleDude:
         return HttpResponseRedirect(reverse("creation"))
-    
-    return render(request, "habitat.html", {"little_dude": little_dude})
+    return render(request, "habitat.html", {"littleDude": littleDude.first()})
 
 def creation(request):
     user = request.user
@@ -38,4 +37,19 @@ def creation(request):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
     
-    return render(request, "creation.html")
+    if request.method == "POST":
+        form = CreateLittleDudeForm(request.POST)
+        if form.is_valid():
+            littleDude = form.save(commit=False)
+            littleDude.user = user
+            littleDude.save()
+            return HttpResponseRedirect(reverse("habitat"))
+        else: return HttpResponseRedirect(reverse("index"))
+
+    else: 
+        form = CreateLittleDudeForm()
+        return render(request, "creation.html", {"form": form,})
+    
+
+    
+    
