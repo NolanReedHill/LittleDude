@@ -115,7 +115,18 @@ function initPhysics() {
 
     Composite.add(world, mouseConstraint);
 
-
+    const feedButton = document.getElementById("feedButton");
+    feedButton.onclick = function(event) {
+        xpos = randomIntFromInterval(150, 1100)
+        ypos = randomIntFromInterval(100, 300)
+        foodOptions = {
+            render: {
+                fillStyle: 'brown'
+            }
+        };
+        foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
+        Composite.add(world, foodPiece);
+    }
 // keep the mouse in sync with rendering
     render.mouse = mouse;
     function randomIntFromInterval(min, max) { // min and max included
@@ -451,7 +462,6 @@ function biped(x, y, scale, options, bodyParts) {
 function quadruped(x, y, scale, options) {
     scale = typeof scale === 'undefined' ? 1 : scale;
 
-
     var Body = Matter.Body,
         Bodies = Matter.Bodies,
         Constraint = Matter.Constraint,
@@ -780,6 +790,6 @@ function dropFood() {
 //                fillStyle: 'brown'
 //            }
 //        };
-    foodPiece = Bodies.rectangle(400, 200, 40, 40)
+    foodPiece = Bodies.rectangle(400, 200, 40, 40);
     Composite.add(world, foodPiece);
 }
