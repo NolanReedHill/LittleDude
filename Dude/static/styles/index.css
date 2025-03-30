@@ -1,0 +1,22 @@
+.title-text {
+    text-align: center;
+}
+
+.button {
+    margin-top: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    font-family: lobster, cursive, sans-serif;
+    background-color: #5b94f0;
+    overflow-x: hidden;
+    color: white;
+}
+p {
+    width: fit-content;
+    margin: auto;
+    margin-top: 20px;
+}
