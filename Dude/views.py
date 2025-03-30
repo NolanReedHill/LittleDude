@@ -9,3 +9,7 @@ from django.utils import timezone
 # Create your views here.
 class DrawingView(generic.TemplateView):
     template_name = 'Dude/drawing.html'
+
+
+class HabitatView(generic.TemplateView):
+    template_name = 'Dude/habitat.html'
