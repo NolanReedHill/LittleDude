@@ -18,4 +18,6 @@ urlpatterns = [
     path("walk", views.walk, name="walk"),
     path("sendData", views.sendData, name="sendData"),
     path("death", views.death, name="death"),
+    path("physics", views.physics, name="physics"),
+    # path("drawing", views.drawing, name="drawing"),
 ]

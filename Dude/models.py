@@ -41,7 +41,6 @@ class LittleDude(models.Model):
     onWalk = models.BooleanField(default=False)
 
 class CreateLittleDudeForm(forms.ModelForm):
-
     class Meta:
         model = LittleDude
         fields = [
@@ -67,3 +66,4 @@ class CreateLittleDudeForm(forms.ModelForm):
         def save(self, commit=True):
             self.instance.status = "New"
             return super().save(commit)
+
