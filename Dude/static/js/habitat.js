@@ -40,7 +40,8 @@ function initPhysics() {
                 xScale: 1.7,
                 yScale: 1.7
             }
-        }
+        },
+        label: "box"
     });
     Composite.add(world, ball);
 
@@ -125,8 +126,8 @@ function initPhysics() {
             Bodies.rectangle(-100, 300, 300, 800, wallOptions   )
         ]);
 
-// add all of the bodies to the world
-    Composite.add(engine.world, [boxA,]);
+   Composite.add(engine.world, [boxA,]);
+
 
 
 // run the renderer
@@ -159,7 +160,8 @@ function initPhysics() {
         foodOptions = {
             render: {
                 fillStyle: 'brown'
-            }
+            },
+            label: "box"
         };
         foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
         Composite.add(world, foodPiece);
