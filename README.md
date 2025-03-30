@@ -23,3 +23,10 @@ Starting with the Arduino-pedometer system, C++, ArduinoIDE, Python via VSCode, 
 # Outside sources / inspiration link:
 [arduino pedometer code](https://www.engineersgarage.com/arduino-based-walking-steps-distance-calculator-adxl345/)
 
+# Contributions:
+Aislinn Jones - Arduino-pedometer system creation, C++, python-arduino connections
+
+Nolan Hill - troubleshooting, routing, page setup, interaction with Gemini API, login stuff, setting up database records
+
+Chris Cheng - creation of the habitat with physics, modeling the LittleDudes and drawing them, as well as interaction such as feeding and playing with them
+
