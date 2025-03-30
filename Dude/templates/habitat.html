@@ -7,23 +7,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
     </head>
-    <body>
+    <style>
+        #renderArea {
+            display: flex;
+            width: 80%;
+            height: 70vh;
+            justify-content: center;
+            margin: auto;
+            margin-top: 50px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js" integrity="sha512-3CP+e7z5ieYYTIyvRvV3eGVYR67yXg5V2mWfg8pEJJd2mlh8tG/cnDv5scTmRztEYHTksBlpPOmxFOiMtHfZdQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {% load static %}
+    <script src="{% static 'js/habitat.js' %}"></script>
+    <input type="hidden" id="littleDudeType" value="{{ littleDude.type }}" />
+<!--    {% if is_biped %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Biped"-->
+<!--    </script>-->
+<!--    {% elif is_quadraped %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Quadraped"-->
+<!--    </script>-->
+<!--    {% elif is_ooze %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Ooze"-->
+<!--    </script>-->
+<!--    {% endif %}-->
+    <body onload="initPhysics()">
         <h1 style="width: fit-content; margin: auto;">{{ littleDude.name }}'s Habitat</h1>
+        <h2 style="width: fit-content; margin: auto;">Level {{littleDude.level}}</h2>
         
         <h1 id="response"></h1>
-        <div class="row" style="position: absolute; bottom: 10px; width: 50%; margin-left: 25%;">
+
+          <div id="renderArea"></div>
+
+          <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 8vh;">
             <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt" style="width: 50%;">
             <button class="btn btn-success" id="submitQuery" style="width: fit-content; margin-left: 10px;">Chat</button>
+            <button class="btn" id="feedButton" onclick="dropFood()" style="width: fit-content; margin-left: 10px;">Feed </button>
             <button class="btn btn-warning" style="width: fit-content; margin-left: 10px;" data-toggle="modal" data-target="#walkModal">Walk</button>
             <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" style="width: fit-content; margin-left: 10px;" id="retireButton">Retire</button>
         </div>
-          
           <!-- Retire Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header" style="display: flex; justify-content: space-between;">
-                  <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Retire</h5>
+                  <h5 class="modal-title" id="exampleModalLabel1" style="color: black;">Retire</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

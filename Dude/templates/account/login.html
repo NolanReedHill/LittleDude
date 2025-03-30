@@ -6,10 +6,60 @@
 {% endblock head_title %}
 {% block content %}
 <!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Out</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: lobster, cursive, sans-serif;
+            background-color: #5b94f0;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            padding: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .slogan {
+            font-size: 16px;
+            color: black;
+            margin-top: 10px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+        /* Pink button on hover */
+        .btn-custom-color:hover {
+            background-color: blue;
+            color: white;
+        }
+        .btn-custom-color {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+
     {% element h1 %}
         {% trans "Sign In" %}
     {% endelement %}
-    {% if not SOCIALACCOUNT_ONLY %}
         {% setvar link %}
             <a href="{{ signup_url }}">
             {% endsetvar %}
@@ -26,31 +76,14 @@
                 {{ redirect_field }}
             {% endslot %}
             {% slot actions %}
-                {% element button type="submit" tags="prominent,login" %}
-                    {% trans "Sign In" %}
-                {% endelement %}
+            <button type="submit" class="btn btn-light btn-lg btn-custom-color">
+                {% trans "Sign In" %}
+            </button>
             {% endslot %}
         {% endelement %}
-    {% endif %}
-    {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element button_group vertical=True %}
-            {% if PASSKEY_LOGIN_ENABLED %}
-                {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
-                    {% trans "Sign in with a passkey" %}
-                {% endelement %}
-            {% endif %}
-            {% if LOGIN_BY_CODE_ENABLED %}
-                {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
-                    {% trans "Send me a sign-in code" %}
-                {% endelement %}
-            {% endif %}
-        {% endelement %}
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
+        <a class="btn btn-danger" style="margin-top: 20px;" href="{% url 'index' %}">Back</a>
+</div>
+</body>
 {% endblock content %}
 {% block extra_body %}
     {{ block.super }}

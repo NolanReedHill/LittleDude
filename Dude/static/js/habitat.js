@@ -1,100 +1,195 @@
-var Engine = Matter.Engine,
-    Render = Matter.Render,
-    Runner = Matter.Runner,
-    Bodies = Matter.Bodies,
-    MouseConstraint = Matter.MouseConstraint,
-    Mouse = Matter.Mouse
+let world, engine, runner;
+
+function initPhysics() {
+    const imageUrl = "/static/images/tree.jpg";
+    const imgElement = document.createElement("img");
+    imgElement.src = imageUrl;
+
+    var Engine = Matter.Engine,
+        Render = Matter.Render,
+        Runner = Matter.Runner,
+        Bodies = Matter.Bodies,
+        Body = Matter.Body,
+        MouseConstraint = Matter.MouseConstraint,
+        Mouse = Matter.Mouse,
+        Common = Matter.Common,
     Composite = Matter.Composite;
 
 // create an engine
-var engine = Engine.create();
-var world = engine.world;
+     engine = Engine.create();
+     world = engine.world;
 // create a renderer
-var render = Render.create({
-    element: document.body,
-    engine: engine,
-    options: {
-        width: 1280,
-        height: 720,
-        hasBounds: true,
-        wireframes: true
-    }
-});
-
-// create two boxes and a ground
-
-var boxA = Bodies.rectangle(400, 200, 100, 80, {
-    render: {
-        sprite: {
-            texture: 'static/images/tree.jpg',
-            xScale: 1,
-            yScale: 1
-        }
-    }
-});
-
-var ragdoll = biped(800, 200, 1)
-Composite.add(world, [
-    // walls
-    Bodies.rectangle(400, -50, 2000, 300, { isStatic: true }),
-    Bodies.rectangle(400, 800, 2000, 300, { isStatic: true }),
-    Bodies.rectangle(1380, 300, 300, 800, { isStatic: true }),
-    Bodies.rectangle(-100, 300, 300, 800, { isStatic: true })
-]);
-
-var particleOptions = {
-    friction: 0.05,
-    frictionStatic: 0.1,
-    render: { visible: true }
-};
-Composite.add(world, [
-    // see softBody function defined later in this file
-    ooze(250, 100, 10, 15, 0, 0, true, 10, particleOptions),
-]);
-
-// add all of the bodies to the world
-Composite.add(engine.world, [boxA, ragdoll]);
-
-
-// run the renderer
-Render.run(render);
-
-// create runner
-var runner = Runner.create();
-
-// run the engine
-Runner.run(runner, engine);
-
-// add mouse control
-var mouse = Mouse.create(render.canvas),
-    mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-            stiffness: 0.2,
-            render: {
-                visible: true
-            }
+    var render = Render.create({
+        element: document.getElementById("renderArea"),
+        engine: engine,
+        options: {
+            width: 1280,
+            height: 640,
+            hasBounds: true,
+            wireframes: false,
+            background: "#7facf5"
         }
     });
 
-Composite.add(world, mouseConstraint);
+    // ball
+    var ball = Bodies.circle(200, 200, 80, {
+        restitution: 0.8,
+        render: {
+            sprite: {
+                texture: "/static/images/ball.png",
+                xScale: 1.7,
+                yScale: 1.7
+            }
+        }
+    });
+    Composite.add(world, ball);
 
+    // make a box
+    var boxA = Bodies.rectangle(400, 200, 100, 100, {
+        render: {
+            sprite: {
+                texture: "/static/images/box.png",
+                xScale: 0.4,
+                yScale: 0.4
+            }
+        },
+        label: "box"
+    });
+
+    var creatureType = document.getElementById("littleDudeType").value
+    var creature;
+    if (creatureType === "Biped") {
+        creature = biped(800,200,1)
+        Composite.add(world, creature);
+    } else if (creatureType === "Quadraped") {
+        creature = quadruped(800,200,1);
+        Composite.add(world, creature);
+    } else if (creatureType === "Ooze") {
+        // generate an ooze
+        var particleOptions = {
+            friction: 0.05,
+            frictionStatic: 0.1,
+            render: {visible: true}
+        };
+        creature = ooze(800, 200, 10, 15, 0, 0, true, 10, particleOptions);
+        Composite.add(world, 
+            // see softBody function defined later in this file
+            creature);
+    }
+    var lastTime = Common.now();
+    Matter.Events.on(engine, "afterUpdate", function(event) {
+        var engine = event.source;
+
+        if (Common.now() - lastTime >= 5000) {
+            moveCreature(engine);
+
+            lastTime = Common.now();
+        }
+    });
+
+    var moveCreature = function(engine) {
+        
+        var timeScale = (1000 / 60) / engine.timing.lastDelta;
+        var bodies = Composite.allBodies(engine.world);
+
+        for (var i = 0; i < bodies.length; i++) {
+            var body = bodies[i];
+            if(body.label === "box") continue;
+            if (!body.isStatic && body.position.y >= 500) {
+                // scale force for mass and time applied
+                var forceMagnitude = (0.05 * body.mass) * timeScale;
+
+                // apply the force over a single update
+                Body.applyForce(body, body.position, { 
+                    x: (forceMagnitude + Common.random() * (forceMagnitude*2)) * Common.choose([1, -1]), 
+                    y: -forceMagnitude + Common.random() * -forceMagnitude
+                });
+            }
+        }
+        }
+    // var ragdoll = biped(800, 200, 1)
+    var wallOptions = {
+        isStatic:true,
+        render: {
+            fillStyle: 'black',
+            strokeStyle: 'black',
+            lineWidth: 3
+        }
+    }
+
+        Composite.add(world, [
+            // walls
+            Bodies.rectangle(400, -50, 2000, 300, wallOptions),
+            Bodies.rectangle(400, 700, 2000, 300, wallOptions),
+            Bodies.rectangle(1380, 300, 300, 800, wallOptions  ),
+            Bodies.rectangle(-100, 300, 300, 800, wallOptions   )
+        ]);
+
+// add all of the bodies to the world
+    Composite.add(engine.world, [boxA,]);
+
+
+// run the renderer
+    Render.run(render);
+
+// create runner
+    runner = Runner.create();
+
+// run the engine
+    Runner.run(runner, engine);
+
+// add mouse control
+    var mouse = Mouse.create(render.canvas),
+        mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: {
+                    visible: false
+                }
+            }
+        });
+
+    Composite.add(world, mouseConstraint);
+
+    const feedButton = document.getElementById("feedButton");
+    feedButton.onclick = function(event) {
+        xpos = randomIntFromInterval(150, 1100)
+        ypos = randomIntFromInterval(100, 300)
+        foodOptions = {
+            render: {
+                fillStyle: 'brown'
+            }
+        };
+        foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
+        Composite.add(world, foodPiece);
+    }
 // keep the mouse in sync with rendering
-render.mouse = mouse;
+    render.mouse = mouse;
+    function randomIntFromInterval(min, max) { // min and max included
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
 
-class bodyParts {
-    leftLeg;
-    rightLeg;
-    leftArm;
-    rightArm;
-    constructor() {
-        this.leftLeg = 'static/images/tree.jpg'
-        this.leftLeg = 'static/images/tree.jpg'
-        this.leftLeg = 'static/images/tree.jpg'
-        this.leftLeg = 'static/images/tree.jpg'
+
+
+    class bipedBodyImages {
+        leftLeg;
+        rightLeg;
+        leftArm;
+        rightArm;
+
+        constructor(leftLeg, rightLeg, leftArm, rightArm) {
+            this.leftLeg = leftLeg
+            this.rightLeg = rightLeg
+            this.leftArm = leftArm
+            this.rightArm = rightArm
+        }
+    }
+
+    class oozeBodyImage {
+
     }
 }
-
 
 function biped(x, y, scale, options, bodyParts) {
     scale = typeof scale === 'undefined' ? 1 : scale;
@@ -401,9 +496,8 @@ function biped(x, y, scale, options, bodyParts) {
     return person;
 }
 
-function quadriped(x, y, scale, options) {
+function quadruped(x, y, scale, options) {
     scale = typeof scale === 'undefined' ? 1 : scale;
-
 
     var Body = Matter.Body,
         Bodies = Matter.Bodies,
@@ -706,15 +800,15 @@ function quadriped(x, y, scale, options) {
     return person;
 }
 
-function ooze(xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions) {
+function ooze(xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions, oozeBodyImage) {
     var Common = Matter.Common,
         Composites = Matter.Composites,
         Bodies = Matter.Bodies;
 
-    particleOptions = Common.extend({ inertia: Infinity }, particleOptions);
-    constraintOptions = Common.extend({ stiffness: 0.2, render: { type: 'line', anchors: false } }, constraintOptions);
+    particleOptions = Common.extend({inertia: Infinity}, particleOptions);
+    constraintOptions = Common.extend({stiffness: 0.2, render: {type: 'line', anchors: false, lineWidth: 0}}, constraintOptions);
 
-    var softBody = Composites.stack(xx, yy, columns, rows, columnGap, rowGap, function(x, y) {
+    var softBody = Composites.stack(xx, yy, columns, rows, columnGap, rowGap, function (x, y) {
         return Bodies.circle(x, y, particleRadius, particleOptions);
     });
 
@@ -722,5 +816,17 @@ function ooze(xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadi
 
     softBody.label = 'Soft Body';
 
-    return softBody;
+    return softBody
+}
+
+function dropFood() {
+    xpos = randomIntFromInterval(150, 1100)
+    ypos = randomIntFromInterval(100, 300)
+//        foodOptions = {
+//            render: {
+//                fillStyle: 'brown'
+//            }
+//        };
+    foodPiece = Bodies.rectangle(400, 200, 40, 40);
+    Composite.add(world, foodPiece);
 }

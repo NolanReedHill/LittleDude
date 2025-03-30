@@ -8,6 +8,14 @@
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
     </head>
     <body>
-        walkies
+        <div class="row">
+            <h1 style="width: fit-content; margin: auto; margin-bottom: 30px;">Send {{littleDude.name}} on a walk?</h1>
+            <h2 style="text-align: center; margin: auto;">Sending your Little Dude on a walk lets them gain experience and level up. </h2>
+            <h2 style="text-align: center; margin-top: 20px;">While {{littleDude.name}} is away you will be unable to talk with him.</h2>
+            <h3 style="text-align: center;">This action requires the LittleDude pocket device to be plugged in to this computer.</h3>
+        </div>
+        <div class="row">
+            <a href="{% url 'sendData' %}" class="btn btn-success" style="width: fit-content; margin: auto; margin-top: 20px;" id="walkButton">Send on Walk</a>
+        </div>
     </body>
 </html>

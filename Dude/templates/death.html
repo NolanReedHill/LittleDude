@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load django_bootstrap5 %}
+{% bootstrap_css %} {% bootstrap_javascript %} {% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+    </head>
+    <body>
+        <div class="row">
+            <h1 style="width: fit-content; margin: auto;">{{deadName}} Has Starved.</h1>
+        </div>
+        <div class="row" style="display: flex; margin: auto; flex-direction: column;">
+            <a class="btn btn-success" style="width: fit-content; margin: auto; margin-top: 20px;" href="{% url 'habitat' %}">Create New Little Dude</a>
+            <a class="btn btn-primary" style="width: fit-content; margin: auto; margin-top: 20px;" href="{% url 'index' %}">Back to Home</a>
+        </div>
+
+    </body>
+</html>

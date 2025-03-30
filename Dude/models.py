@@ -38,9 +38,9 @@ class LittleDude(models.Model):
     personality = models.CharField(max_length=40, choices=PERSONALITIES, default="Bubbly")
     hunger = models.CharField(max_length=40, choices=HUNGER, default="None")
     lastVisit = models.DateTimeField(default=datetime.now())
+    onWalk = models.BooleanField(default=False)
 
 class CreateLittleDudeForm(forms.ModelForm):
-
     class Meta:
         model = LittleDude
         fields = [
@@ -66,3 +66,4 @@ class CreateLittleDudeForm(forms.ModelForm):
         def save(self, commit=True):
             self.instance.status = "New"
             return super().save(commit)
+
