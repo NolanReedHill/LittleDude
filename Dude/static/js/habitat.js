@@ -1,5 +1,3 @@
-// module aliases
-
 var Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
@@ -19,7 +17,7 @@ var render = Render.create({
         width: 1280,
         height: 720,
         hasBounds: true,
-        wireframes: false
+        wireframes: true
     }
 });
 
@@ -43,6 +41,17 @@ Composite.add(world, [
     Bodies.rectangle(1380, 300, 300, 800, { isStatic: true }),
     Bodies.rectangle(-100, 300, 300, 800, { isStatic: true })
 ]);
+
+var particleOptions = {
+    friction: 0.05,
+    frictionStatic: 0.1,
+    render: { visible: true }
+};
+Composite.add(world, [
+    // see softBody function defined later in this file
+    ooze(250, 100, 10, 15, 0, 0, true, 10, particleOptions),
+]);
+
 // add all of the bodies to the world
 Composite.add(engine.world, [boxA, ragdoll]);
 
@@ -697,6 +706,21 @@ function quadriped(x, y, scale, options) {
     return person;
 }
 
-function ooze(size) {
+function ooze(xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions) {
+    var Common = Matter.Common,
+        Composites = Matter.Composites,
+        Bodies = Matter.Bodies;
 
+    particleOptions = Common.extend({ inertia: Infinity }, particleOptions);
+    constraintOptions = Common.extend({ stiffness: 0.2, render: { type: 'line', anchors: false } }, constraintOptions);
+
+    var softBody = Composites.stack(xx, yy, columns, rows, columnGap, rowGap, function(x, y) {
+        return Bodies.circle(x, y, particleRadius, particleOptions);
+    });
+
+    Composites.mesh(softBody, columns, rows, crossBrace, constraintOptions);
+
+    softBody.label = 'Soft Body';
+
+    return softBody;
 }

@@ -11,5 +11,6 @@ class DrawingView(generic.TemplateView):
     template_name = 'Dude/drawing.html'
 
 
+
 class HabitatView(generic.TemplateView):
     template_name = 'Dude/habitat.html'
