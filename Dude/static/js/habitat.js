@@ -7,8 +7,10 @@ function initPhysics() {
         Render = Matter.Render,
         Runner = Matter.Runner,
         Bodies = Matter.Bodies,
+        Body = Matter.Body,
         MouseConstraint = Matter.MouseConstraint,
-        Mouse = Matter.Mouse
+        Mouse = Matter.Mouse,
+        Common = Matter.Common,
     Composite = Matter.Composite;
 
 // create an engine
@@ -22,7 +24,8 @@ function initPhysics() {
             width: 1280,
             height: 640,
             hasBounds: true,
-            wireframes: false
+            wireframes: false,
+            background: "#7facf5"
         }
     });
 
@@ -43,15 +46,19 @@ function initPhysics() {
             sprite: {
                 texture: imageUrl,
                 xScale: 0.5,
-                yScale: 0.3
+                yScale: 0.3,
             }
-        }
+        },
+        label: "box"
     });
     var creatureType = document.getElementById("littleDudeType").value
+    var creature;
     if (creatureType === "Biped") {
-        Composite.add(world, biped(800,200,1));
+        creature = biped(800,200,1)
+        Composite.add(world, creature);
     } else if (creatureType === "Quadraped") {
-        Composite.add(world, quadruped(800,200,1));
+        creature = quadruped(800,200,1);
+        Composite.add(world, creature);
     } else if (creatureType === "Ooze") {
         // generate an ooze
         var particleOptions = {
@@ -59,18 +66,48 @@ function initPhysics() {
             frictionStatic: 0.1,
             render: {visible: true}
         };
-
-        Composite.add(world, [
+        creature = ooze(800, 200, 10, 15, 0, 0, true, 10, particleOptions);
+        Composite.add(world, 
             // see softBody function defined later in this file
-            ooze(800, 200, 10, 15, 0, 0, true, 10, particleOptions),
-        ]);
+            creature);
     }
+    var lastTime = Common.now();
+    Matter.Events.on(engine, "afterUpdate", function(event) {
+        var engine = event.source;
+
+        if (Common.now() - lastTime >= 5000) {
+            moveCreature(engine);
+
+            lastTime = Common.now();
+        }
+    });
+
+    var moveCreature = function(engine) {
+        
+        var timeScale = (1000 / 60) / engine.timing.lastDelta;
+        var bodies = Composite.allBodies(engine.world);
+
+        for (var i = 0; i < bodies.length; i++) {
+            var body = bodies[i];
+            if(body.label === "box") continue;
+            if (!body.isStatic && body.position.y >= 500) {
+                // scale force for mass and time applied
+                var forceMagnitude = (0.05 * body.mass) * timeScale;
+
+                // apply the force over a single update
+                Body.applyForce(body, body.position, { 
+                    x: (forceMagnitude + Common.random() * (forceMagnitude*2)) * Common.choose([1, -1]), 
+                    y: -forceMagnitude + Common.random() * -forceMagnitude
+                });
+            }
+        }
+        }
     // var ragdoll = biped(800, 200, 1)
     var wallOptions = {
         isStatic:true,
         render: {
-            fillStyle: 'grey',
-            strokeStyle: 'grey',
+            fillStyle: 'black',
+            strokeStyle: 'black',
             lineWidth: 3
         }
     }
