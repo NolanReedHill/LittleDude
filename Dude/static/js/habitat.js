@@ -27,26 +27,29 @@ function initPhysics() {
     });
 
     // ball
-//    var ball = Bodies.circle(200, 200, 100, 80, {
-//        render: {
-//            sprite: {
-//                texture: "/static/images/Beach_Ball.jpg",
-//                xScale: 0.5,
-//                yScale: 0.5
-//            }
-//        }
-//    });
-
-    // make a tree box
-    var boxA = Bodies.rectangle(400, 200, 100, 80, {
+    var ball = Bodies.circle(200, 200, 80, {
+        restitution: 0.8,
         render: {
             sprite: {
-                texture: imageUrl,
-                xScale: 0.5,
-                yScale: 0.3
+                texture: "/static/images/ball.png",
+                xScale: 1.7,
+                yScale: 1.7
             }
         }
     });
+    Composite.add(world, ball);
+
+    // make a box
+    var boxA = Bodies.rectangle(400, 200, 100, 100, {
+        render: {
+            sprite: {
+                texture: "/static/images/box.png",
+                xScale: 0.4,
+                yScale: 0.4
+            }
+        }
+    });
+
     var creatureType = document.getElementById("littleDudeType").value
     if (creatureType === "Biped") {
         Composite.add(world, biped(800,200,1));
