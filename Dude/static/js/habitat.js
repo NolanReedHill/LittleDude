@@ -26,6 +26,17 @@ function initPhysics() {
         }
     });
 
+    // ball
+//    var ball = Bodies.circle(200, 200, 100, 80, {
+//        render: {
+//            sprite: {
+//                texture: "/static/images/Beach_Ball.jpg",
+//                xScale: 0.5,
+//                yScale: 0.5
+//            }
+//        }
+//    });
+
     // make a tree box
     var boxA = Bodies.rectangle(400, 200, 100, 80, {
         render: {
