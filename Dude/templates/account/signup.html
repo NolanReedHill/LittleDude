@@ -1,7 +1,7 @@
-{% extends "account/base_manage.html" %}
+{% extends "account/base_entrance.html" %}
 {% load allauth i18n %}
 {% block head_title %}
-{% trans "Sign Out" %}
+    {% trans "Signup" %}
 {% endblock head_title %}
 {% block content %}
 <!DOCTYPE html>
@@ -9,8 +9,6 @@
 {% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-<html lang="en">
-<link rel="shortcut icon" type="image/png" href="{% static 'icons/favicon-32x32.png' %}" >
 <head>
     <meta charset="UTF-8">
     <title>Sign Out</title>
@@ -23,6 +21,10 @@
             margin: 0;
             font-family: lobster, cursive, sans-serif;
             background-color: #5b94f0;
+            text-align: center;
+        }
+        li {
+            text-align: left;
         }
         .container {
             text-align: center;
@@ -52,27 +54,44 @@
         .btn-custom-color {
             background-color: lightblue;
         }
+        a {
+            color: black;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <p class="slogan">{% trans 'Are you sure you want to sign out?' %}</p>
-        </div>
-        {% url 'account_logout' as action_url %}
-        {% element form method="post" action=action_url no_visible_fields=True %}
-        {% slot body %}
-        {% csrf_token %}
-        {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-        <button type="submit" class="btn btn-light btn-lg btn-custom-color">
-            {% trans 'Sign Out' %}
-        </button>
-        {% endslot %}
+    <div>
+    <div>
+    {% element h1 %}
+        {% trans "Sign Up" %}
+    {% endelement %}
+    {% setvar link %}
+        <a href="{{ login_url }}">
+        {% endsetvar %}
+        {% setvar end_link %}
+        </a>
+    {% endsetvar %}
+    {% element p %}
+        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
+    {% endelement %}
+</div>
+<div>
+        {% url 'account_signup' as action_url %}
+        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
+            {% slot body %}
+                {% csrf_token %}
+                {% element fields form=form unlabeled=True %}
+                {% endelement %}
+                {{ redirect_field }}
+            {% endslot %}
+            {% slot actions %}
+            <button type="submit" class="btn btn-light btn-lg btn-custom-color">
+                {% trans "Sign Up" %}
+            </button>
+            {% endslot %}
         {% endelement %}
         <a class="btn btn-danger" style="margin-top: 20px;" href="{% url 'index' %}">Back</a>
     </div>
+</div>
 </body>
-</html>
 {% endblock content %}

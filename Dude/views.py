@@ -112,7 +112,7 @@ def generateQueryParameters(request):
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
 
     parameters = "You are a Little Dude. Little Dudes are small creatures that are kept as pets by humans."
-    parameters += " Your name is "+littleDude.name+". Your owner's name is "+user.username+". Your creature type is "+littleDude.type+"."
+    parameters += " Your name is "+littleDude.name+". Your owner's name is "+user.username+". You are currently speaking to your owner. Your creature type is "+littleDude.type+"."
     if littleDude.personality == "Hater":
         parameters += "Your personality type is hater. You are a generally negative little dude who just loves to bring others down."+"You find joy in making snarky remarks and little barbs."
     elif littleDude.personality == "Shy":
@@ -148,7 +148,8 @@ def walk(request):
 
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
-    return render(request, "walk.html")
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    return render(request, "walk.html", {"littleDude": littleDude})
 
 def sendData(request):
     user = request.user
