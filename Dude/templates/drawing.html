@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load django_bootstrap5 %}
+{% bootstrap_css %} {% bootstrap_javascript %} {% load static %}
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,
@@ -87,7 +89,7 @@
 		<div class="draw-area">
 			<canvas id="canvas" width="1280" height="720"></canvas>
 		</div>
-        <button id="save" onclick="save()">Save</button>
+		<a href="{% url 'habitat' %}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px;">Back to Habitat</a>
 	</div>
 
 	<!-- Bootstrap JS -->

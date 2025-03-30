@@ -45,11 +45,12 @@
         <h1 id="response"></h1>
           <div id="renderArea"></div>
 
-          <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 8vh;">
+          <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 4vh;">
             <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt" style="width: 50%;">
             <button class="btn btn-success" id="submitQuery" style="width: fit-content; margin-left: 10px;">Chat</button>
             <button class="btn btn-info" id="feedButton" onclick="dropFood()" style="width: fit-content; margin-left: 10px;">Feed </button>
             <button class="btn btn-warning" style="width: fit-content; margin-left: 10px;" data-toggle="modal" data-target="#walkModal">Walk</button>
+            <a class="btn btn-secondary" style="width: fit-content; margin-left: 10px;" href="{% url 'draw' %}">Draw</a>
             <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" style="width: fit-content; margin-left: 10px;" id="retireButton">Retire</button>
         </div>
           <!-- Retire Modal -->
