@@ -40,7 +40,6 @@ class LittleDude(models.Model):
     lastVisit = models.DateTimeField(default=datetime.now())
 
 class CreateLittleDudeForm(forms.ModelForm):
-
     class Meta:
         model = LittleDude
         fields = [
@@ -66,3 +65,4 @@ class CreateLittleDudeForm(forms.ModelForm):
         def save(self, commit=True):
             self.instance.status = "New"
             return super().save(commit)
+

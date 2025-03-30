@@ -16,4 +16,6 @@ urlpatterns = [
     path("submit-query", views.submitQuery, name="submit-query"),
     path("retire", views.retire, name="retire"),
     path("walk", views.walk, name="walk"),
+    path("physics", views.physics, name="physics"),
+    path("drawing", views.drawing, name="drawing"),
 ]
