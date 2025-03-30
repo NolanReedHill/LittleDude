@@ -1,7 +1,7 @@
 # LittleDude
 # CREDITS:
 # Nolan Hill [GitHub](https://github.com/NolanReedHill) [LinkedIn](https://www.linkedin.com/in/nolanreedhill/)
-# Aislinn Jones [GitHub]() [LinkedIn](https://www.linkedin.com/in/aislinn-jones-4259961b6/)
+# Aislinn Jones [GitHub](https://github.com/amjams22) [LinkedIn](https://www.linkedin.com/in/aislinn-jones-4259961b6/)
 # Chris Cheng [GitHub](https://github.com/ChrisC005) [LinkedIn](https://www.linkedin.com/in/christopher-c-422936268/)
 UVA Hackathon 2025, 3/29-3/30 12pm-12-pm
 ----------------------------------------
