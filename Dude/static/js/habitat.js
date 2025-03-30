@@ -112,8 +112,8 @@ function initPhysics() {
     var wallOptions = {
         isStatic:true,
         render: {
-            fillStyle: 'black',
-            strokeStyle: 'black',
+            fillStyle: '#b5906e',
+            strokeStyle: 'green',
             lineWidth: 3
         }
     }
