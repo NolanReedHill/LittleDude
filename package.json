@@ -1,0 +1,24 @@
+{
+  "name": "littledude",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NolanReedHill/LittleDude.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NolanReedHill/LittleDude/issues"
+  },
+  "homepage": "https://github.com/NolanReedHill/LittleDude#readme",
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
+    "matter-js": "^0.20.0"
+  }
+}

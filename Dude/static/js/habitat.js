@@ -19,13 +19,22 @@ var render = Render.create({
         width: 1280,
         height: 720,
         hasBounds: true,
-        wireframes: true
+        wireframes: false
     }
 });
 
 // create two boxes and a ground
 
-var boxA = Bodies.rectangle(400, 200, 100, 80);
+var boxA = Bodies.rectangle(400, 200, 100, 80, {
+    render: {
+        sprite: {
+            texture: 'static/images/tree.jpg',
+            xScale: 1,
+            yScale: 1
+        }
+    }
+});
+
 var ragdoll = biped(800, 200, 1)
 Composite.add(world, [
     // walls
@@ -64,9 +73,21 @@ Composite.add(world, mouseConstraint);
 // keep the mouse in sync with rendering
 render.mouse = mouse;
 
+class bodyParts {
+    leftLeg;
+    rightLeg;
+    leftArm;
+    rightArm;
+    constructor() {
+        this.leftLeg = 'static/images/tree.jpg'
+        this.leftLeg = 'static/images/tree.jpg'
+        this.leftLeg = 'static/images/tree.jpg'
+        this.leftLeg = 'static/images/tree.jpg'
+    }
+}
 
 
-function biped(x, y, scale, options) {
+function biped(x, y, scale, options, bodyParts) {
     scale = typeof scale === 'undefined' ? 1 : scale;
 
     var Body = Matter.Body,
