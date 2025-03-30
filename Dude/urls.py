@@ -11,4 +11,6 @@ urlpatterns = [
     path("habitat", views.habitat, name="habitat"),
     path("creation", views.creation, name="creation"),
     path("submit-query", views.submitQuery, name="submit-query"),
+    path("retire", views.retire, name="retire"),
+    path("walk", views.walk, name="walk"),
 ]

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms
+from datetime import datetime
 
 # Create your models here.
 class LittleDude(models.Model):
@@ -23,7 +24,8 @@ class LittleDude(models.Model):
     HUNGER=(
         ("None", "None"),
         ("Peckish", "Peckish"),
-        ("Starving", "Starving")
+        ("Starving", "Starving"),
+        ("Dead", "Dead")
     )
 
     name = models.CharField(max_length=30, default="")
@@ -31,9 +33,11 @@ class LittleDude(models.Model):
     type = models.CharField(max_length=40, choices=TYPES, default="Biped")
     level = models.IntegerField(default=1)
     xp = models.IntegerField(default=0)
+    xpToNextLevel = models.IntegerField(default=10)
     appearance = models.ImageField(default="")
     personality = models.CharField(max_length=40, choices=PERSONALITIES, default="Bubbly")
     hunger = models.CharField(max_length=40, choices=HUNGER, default="None")
+    lastVisit = models.DateTimeField(default=datetime.now())
 
 class CreateLittleDudeForm(forms.ModelForm):
 
@@ -49,6 +53,7 @@ class CreateLittleDudeForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Name... (max 10 characters)",
+                    "style": "width: 300px;",
                 }
             ),
         }

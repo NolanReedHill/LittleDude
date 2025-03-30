@@ -9,16 +9,18 @@
     </head>
     <body>
         <div class="row">
-            <form method="POST" action="{% url 'creation' %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'creation' %}" enctype="multipart/form-data" 
+            style="display: flex; flex-direction: column; justify-content: center;">
                 <header class="header">
-                    <h1>Create Your Little Dude</h1>
+                    <h1 style="width: fit-content; margin: auto;">Create Your Little Dude</h1>
                 </header>
                 {% csrf_token %}
-                <div>
+                <div style="width: fit-content; margin: auto;">
                     {{form.as_p }}
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-primary" type="submit" style="width: fit-content; margin: auto; margin-top: 20px;">Submit</button>
             </form>
+            <a href="{% url 'index' %}" class="btn btn-success" style="width: fit-content; margin: auto; margin-top: 20px;">Back to Home</a>
         </div>
     </body>
 </html>

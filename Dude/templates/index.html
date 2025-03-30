@@ -8,11 +8,18 @@
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
     </head>
     <body>
-        Little Dude
-        <ul>
-            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-            <li><a href="{% url 'account_login' %}">Log In</a></li>
-            <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
-        </ul>
+       <div class="row">
+            <div class="col-md-6 justify-content-center" style="margin: auto;">
+                <h1 style="width: fit-content; margin: auto;">LittleDude</h1>
+                <h2 style="width: fit-content; margin: auto;">Create Your New Best Friend!</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="button-group justify-content-center" style="display: flex; flex-direction: column; margin: auto; width: fit-content;">
+                <a href="{% url 'account_signup' %}" class="btn btn-success button">Sign Up</a>
+                <a href="{% url 'account_login' %}" class="btn btn-success button">Log In</a>
+            </div>
+        </div>
+        
     </body>
 </html>

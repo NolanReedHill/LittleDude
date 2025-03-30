@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 import os
+from datetime import datetime
 
 load_dotenv()
 client = genai.Client(api_key=os.environ.get("GENAI_SECRET"))
@@ -36,10 +37,27 @@ def habitat(request):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
     
-    littleDude = LittleDude.objects.filter(user_id=user.id)
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
     if not littleDude:
         return HttpResponseRedirect(reverse("creation"))
-    return render(request, "habitat.html", {"littleDude": littleDude.first()})
+    
+    currentTime = datetime.now()
+    lastVisit = littleDude.lastVisit
+    lastVisit = lastVisit.replace(tzinfo=None)
+    timeDifference = currentTime - lastVisit
+    if timeDifference.seconds >= 1800 and timeDifference.seconds < 3600:
+        littleDude.hunger = "Peckish"
+        littleDude.save()
+    elif timeDifference.seconds > 3600 and timeDifference.seconds < 7200:
+        littleDude.hunger = "Starving"
+        littleDude.save()
+    elif timeDifference.seconds > 7200:
+        littleDude.hunger = "Dead"
+        littleDude.save()
+    littleDude.lastVisit = currentTime
+    littleDude.save()
+    #add death functionality
+    return render(request, "habitat.html", {"littleDude": littleDude})
 
 def creation(request):
     user = request.user
@@ -81,7 +99,7 @@ def generateQueryParameters(request):
 
     parameters = "You are a Little Dude. Little Dudes are small creatures that are kept as pets by humans."
     parameters += " Your name is "+littleDude.name+". Your owner's name is "+user.username+". Your creature type is "+littleDude.type+"."
-    if littleDude.personality == "hater":
+    if littleDude.personality == "Hater":
         parameters += "Your personality type is hater. You are a generally negative little dude who just loves to bring others down."+"You find joy in making snarky remarks and little barbs."
     elif littleDude.personality == "Shy":
         parameters+= "Your personality type is shy. You are a bashful little dude who is uncomfortable with too much attention. It's hard "+" for you to come out of your shell and open up."
@@ -93,7 +111,32 @@ def generateQueryParameters(request):
         parameters+= "Your personality type is wise. You think of yourself as very smart, and are sometimes full of yourself. "+"Despite your large ego, you really are intelligent and add a lot to the conversation."
     elif littleDude.personality == "Barbarian":
         parameters+= "Your personality type is barbarian. You are an agent of chaos that is completely unpredicatble. You are competitive"+" and bold, and maybe a little dim-witted. You never back down from a fight."
+
+    if littleDude.hunger == "Peckish":
+        parameters+= "You are a little hungry. You might mention it."
+    elif littleDude.hunger == "Starving":
+        parameters+= "You are very hungry. Make sure to mention it."
+    else:
+        parameters+= "You are not hungry. You were fed recently."
     return parameters
+
+def retire(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    
+    littleDude = LittleDude.objects.filter(user_id=user.id)
+    littleDude.delete()
+    return HttpResponseRedirect(reverse("habitat"))
+
+def walk(request):
+    user = request.user
+
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "walk.html")
+    
+
         
 
     
