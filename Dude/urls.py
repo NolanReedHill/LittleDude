@@ -7,7 +7,7 @@ from django.contrib.auth.views import LogoutView
 from django.conf import settings
 from django.conf.urls.static import static
 
-app_name = 'Dude'
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("home", views.main_page, name="home"),
