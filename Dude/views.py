@@ -11,6 +11,8 @@ import json
 import os
 from datetime import datetime
 from django.views import generic
+import serial
+import time
 
 load_dotenv()
 client = genai.Client(api_key=os.environ.get("GENAI_SECRET"))
@@ -58,7 +60,18 @@ def habitat(request):
     littleDude.lastVisit = currentTime
     littleDude.save()
     #add death functionality
+    if littleDude.hunger == "Dead":
+        return HttpResponseRedirect(reverse("death"))
     return render(request, "habitat.html", {"littleDude": littleDude})
+
+def death(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    deadName = littleDude.name
+    littleDude.delete()
+    return render(request, "death.html", {"deadName": deadName})
 
 def creation(request):
     user = request.user
@@ -137,10 +150,21 @@ def walk(request):
         return HttpResponseRedirect(reverse("index"))
     return render(request, "walk.html")
 
+def sendData(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    ser = serial.Serial('COM3', 9600, timeout=1)
+    time.sleep(2)
+    data = {"steps": "sigma"}
 
-
+    json_string = json.dumps(data)
+    ser.write(((json_string + "\n").encode()))
+    return HttpResponseRedirect(reverse("habitat"))
 
 # Create your views here.
 class DrawingView(generic.TemplateView):
     template_name = 'Dude/drawing.html'
+
+
 
