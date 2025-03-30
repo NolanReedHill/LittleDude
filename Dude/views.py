@@ -229,24 +229,13 @@ def levelUp(request, steps):
 
 
 
-# # Create your views here.
-# def drawing(request):
-#     # redirect to habitat
-#     user = request.user
-#     if not user.is_authenticated:
-#         return HttpResponseRedirect(reverse("index"))
-#     if request.method == "POST":
-#         form = CreateLittleDudeForm(request.POST)
-#         if form.is_valid():
-#             littleDude = form.save(commit=False)
-#             littleDude.user = user
-#             littleDude.save()
-#             return HttpResponseRedirect(reverse("drawing"))
-#         else: return HttpResponseRedirect(reverse("index"))
-#     else:
-#         form = CreateLittleDudeForm()
-#         return render(request, "creation.html", {"form": form,})
-#     return render(request, "drawing.html")
+# Create your views here.
+def draw(request):
+    # redirect to habitat
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "drawing.html")
 
 
 def physics(request):
