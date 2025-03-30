@@ -156,7 +156,7 @@ def sendData(request):
         return HttpResponseRedirect(reverse("index"))
     ser = serial.Serial('COM3', 9600, timeout=1)
     time.sleep(2)
-    data = {"steps": "sigma"}
+    data = {"steps": 56}
 
     json_string = json.dumps(data)
     ser.write(((json_string + "\n").encode()))
