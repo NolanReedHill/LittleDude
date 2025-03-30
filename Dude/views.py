@@ -170,11 +170,12 @@ def sendData(request):
         return HttpResponseRedirect(reverse("index"))
     ser = serial.Serial('COM3', 9600, timeout=1)
     time.sleep(2)
-    data = {"steps": 56}
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    data = {"name": littleDude.name}
 
     json_string = json.dumps(data)
     ser.write(((json_string + "\n").encode()))
-    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    
     littleDude.onWalk = True
     littleDude.save()
     return HttpResponseRedirect(reverse("habitat"))
@@ -192,14 +193,38 @@ def callBack(request):
         return HttpResponseRedirect(reverse("index"))
     
     ser = serial.Serial('COM3', 9600, timeout=1)
-    time.sleep(2)
-    line = ser.readline() #.decode('utf-8').strip()
+    time.sleep(5)
+    line = ser.readline().decode('utf-8').strip()
 
     if not line:
         print("failed")
         return HttpResponseRedirect(reverse("habitat"))
-    print(line)
+
+    data = json.loads(line)
+    steps = data
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    littleDude.onWalk = False
+    littleDude.save()
+    return levelUp(request, steps)
+
+def levelUp(request, steps):
+    user = request.user
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    newXp = steps * 2
+    curXp = littleDude.xp
+    curXp+= newXp
+    nextLevel = littleDude.xpToNextLevel
+    numLevelUps = 0
+    while curXp >= nextLevel:
+        curXp -= nextLevel
+        numLevelUps+=1
+        nextLevel*= 2
+    littleDude.xp = curXp
+    littleDude.level += numLevelUps
+    littleDude.xpToNextLevel = nextLevel
+    littleDude.save()
     return HttpResponseRedirect(reverse("habitat"))
+
     
 
 
