@@ -45,6 +45,8 @@ def habitat(request):
     if not littleDude:
         return HttpResponseRedirect(reverse("creation"))
 
+    if littleDude.onWalk == True:
+        return HttpResponseRedirect(reverse("on-walk"))
     currentTime = datetime.now()
     lastVisit = littleDude.lastVisit
     lastVisit = lastVisit.replace(tzinfo=None)
@@ -172,7 +174,37 @@ def sendData(request):
 
     json_string = json.dumps(data)
     ser.write(((json_string + "\n").encode()))
-    return HttpResponseRedirect(reverse("habitat"))# # Create your views here.
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    littleDude.onWalk = True
+    littleDude.save()
+    return HttpResponseRedirect(reverse("habitat"))
+
+def onWalk(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    return render(request, "onWalk.html", {"littleDude": littleDude})
+
+def callBack(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    
+    ser = serial.Serial('COM3', 9600, timeout=1)
+    time.sleep(2)
+    line = ser.readline() #.decode('utf-8').strip()
+
+    if not line:
+        print("failed")
+        return HttpResponseRedirect(reverse("habitat"))
+    print(line)
+    return HttpResponseRedirect(reverse("habitat"))
+    
+
+
+
+# # Create your views here.
 # def drawing(request):
 #     # redirect to habitat
 #     user = request.user

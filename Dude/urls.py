@@ -19,5 +19,7 @@ urlpatterns = [
     path("sendData", views.sendData, name="sendData"),
     path("death", views.death, name="death"),
     path("physics", views.physics, name="physics"),
+    path("on-walk", views.onWalk, name="on-walk"),
+    path("call-back", views.callBack, name="call-back"),
     # path("drawing", views.drawing, name="drawing"),
 ]

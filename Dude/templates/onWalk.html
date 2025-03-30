@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load django_bootstrap5 %}
+{% bootstrap_css %} {% bootstrap_javascript %} {% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+    </head>
+    <body>
+        <div class="row">
+            <h1 style="width: fit-content; margin: auto; margin-bottom: 30px;">{{littleDude.name}} is on a Walk.</h1>
+            <h2 style="text-align: center; margin: auto;">Please reconnect the pocket device to return {{littleDude.name}} to his habitat. </h2>
+        </div>
+        <div class="row">
+            <a class="btn btn-success" style="width: fit-content; margin: auto; margin-top: 20px;" href="{% url 'call-back' %}">Call Back</a>
+        </div>
+
+    </body>
+</html>
