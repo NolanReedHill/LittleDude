@@ -26,6 +26,17 @@ function initPhysics() {
         }
     });
 
+    // ball
+//    var ball = Bodies.circle(200, 200, 100, 80, {
+//        render: {
+//            sprite: {
+//                texture: "/static/images/Beach_Ball.jpg",
+//                xScale: 0.5,
+//                yScale: 0.5
+//            }
+//        }
+//    });
+
     // make a tree box
     var boxA = Bodies.rectangle(400, 200, 100, 80, {
         render: {
@@ -55,13 +66,21 @@ function initPhysics() {
         ]);
     }
     // var ragdoll = biped(800, 200, 1)
+    var wallOptions = {
+        isStatic:true,
+        render: {
+            fillStyle: 'grey',
+            strokeStyle: 'grey',
+            lineWidth: 3
+        }
+    }
 
         Composite.add(world, [
             // walls
-            Bodies.rectangle(400, -50, 2000, 300, {isStatic: true}),
-            Bodies.rectangle(400, 700, 2000, 300, {isStatic: true}),
-            Bodies.rectangle(1380, 300, 300, 800, {isStatic: true}),
-            Bodies.rectangle(-100, 300, 300, 800, {isStatic: true})
+            Bodies.rectangle(400, -50, 2000, 300, wallOptions),
+            Bodies.rectangle(400, 700, 2000, 300, wallOptions),
+            Bodies.rectangle(1380, 300, 300, 800, wallOptions  ),
+            Bodies.rectangle(-100, 300, 300, 800, wallOptions   )
         ]);
 
 // add all of the bodies to the world
