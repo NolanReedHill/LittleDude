@@ -39,6 +39,7 @@ def habitat(request):
         return HttpResponseRedirect(reverse("index"))
 
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
+
     if not littleDude:
         return HttpResponseRedirect(reverse("creation"))
 
@@ -60,9 +61,19 @@ def habitat(request):
     #add death functionality
     return render(request, "habitat.html", {"littleDude": littleDude})
 
+def is_biped(user):
+    print("help")
+    return LittleDude.objects.filter(user_id=user.id).first().type == "Biped"
+
+def is_quadraped(user):
+    return LittleDude.objects.filter(user_id=user.id).first().type == "Quadraped"
+
+def is_ooze(user):
+    return LittleDude.objects.filter(user_id=user.id).first().type == "Ooze"
+
+
 def creation(request):
     user = request.user
-
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
 
@@ -72,7 +83,7 @@ def creation(request):
             littleDude = form.save(commit=False)
             littleDude.user = user
             littleDude.save()
-            return HttpResponseRedirect(reverse("drawing"))
+            return HttpResponseRedirect(reverse("habitat"))
         else: return HttpResponseRedirect(reverse("index"))
 
     else:
@@ -138,24 +149,24 @@ def walk(request):
     return render(request, "walk.html")
 
 
-# Create your views here.
-def drawing(request):
-    # redirect to habitat
-    user = request.user
-    if not user.is_authenticated:
-        return HttpResponseRedirect(reverse("index"))
-    if request.method == "POST":
-        form = CreateLittleDudeForm(request.POST)
-        if form.is_valid():
-            littleDude = form.save(commit=False)
-            littleDude.user = user
-            littleDude.save()
-            return HttpResponseRedirect(reverse("drawing"))
-        else: return HttpResponseRedirect(reverse("index"))
-    else:
-        form = CreateLittleDudeForm()
-        return render(request, "creation.html", {"form": form,})
-    return render(request, "drawing.html")
+# # Create your views here.
+# def drawing(request):
+#     # redirect to habitat
+#     user = request.user
+#     if not user.is_authenticated:
+#         return HttpResponseRedirect(reverse("index"))
+#     if request.method == "POST":
+#         form = CreateLittleDudeForm(request.POST)
+#         if form.is_valid():
+#             littleDude = form.save(commit=False)
+#             littleDude.user = user
+#             littleDude.save()
+#             return HttpResponseRedirect(reverse("drawing"))
+#         else: return HttpResponseRedirect(reverse("index"))
+#     else:
+#         form = CreateLittleDudeForm()
+#         return render(request, "creation.html", {"form": form,})
+#     return render(request, "drawing.html")
 
 
 def physics(request):

@@ -19,6 +19,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js" integrity="sha512-3CP+e7z5ieYYTIyvRvV3eGVYR67yXg5V2mWfg8pEJJd2mlh8tG/cnDv5scTmRztEYHTksBlpPOmxFOiMtHfZdQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {% load static %}
     <script src="{% static 'js/habitat.js' %}"></script>
+    <input type="hidden" id="littleDudeType" value="{{ littleDude.type }}" />
+<!--    {% if is_biped %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Biped"-->
+<!--    </script>-->
+<!--    {% elif is_quadraped %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Quadraped"-->
+<!--    </script>-->
+<!--    {% elif is_ooze %}-->
+<!--    <script type="text/javascript">-->
+<!--        var creatureType = "Ooze"-->
+<!--    </script>-->
+<!--    {% endif %}-->
     <body onload="initPhysics()">
         <h1 style="width: fit-content; margin: auto;">{{ littleDude.name }}'s Habitat</h1>
         <h1 id="response"></h1>

@@ -3,7 +3,6 @@ function initPhysics() {
     const imgElement = document.createElement("img");
     imgElement.src = imageUrl;
 
-
     var Engine = Matter.Engine,
         Render = Matter.Render,
         Runner = Matter.Runner,
@@ -27,41 +26,46 @@ function initPhysics() {
         }
     });
 
-// create two boxes and a ground
-
+    // make a tree box
     var boxA = Bodies.rectangle(400, 200, 100, 80, {
         render: {
             sprite: {
                 texture: imageUrl,
                 xScale: 0.5,
-                yScale: 0.5
+                yScale: 0.3
             }
         }
     });
+    var creatureType = document.getElementById("littleDudeType").value
+    if (creatureType === "Biped") {
+        Composite.add(world, biped(800,200,1));
+    } else if (creatureType === "Quadraped") {
+        Composite.add(world, quadruped(800,200,1));
+    } else if (creatureType === "Ooze") {
+        // generate an ooze
+        var particleOptions = {
+            friction: 0.05,
+            frictionStatic: 0.1,
+            render: {visible: true}
+        };
 
-    var ragdoll = biped(800, 200, 1)
-    Composite.add(world, [
-        // walls
-        Bodies.rectangle(400, -50, 2000, 300, {isStatic: true}),
-        Bodies.rectangle(400, 700, 2000, 300, {isStatic: true}),
-        Bodies.rectangle(1380, 300, 300, 800, {isStatic: true}),
-        Bodies.rectangle(-100, 300, 300, 800, {isStatic: true})
-    ]);
+        Composite.add(world, [
+            // see softBody function defined later in this file
+            ooze(800, 200, 10, 15, 0, 0, true, 10, particleOptions),
+        ]);
+    }
+    // var ragdoll = biped(800, 200, 1)
 
-// generate an ooze
-//     var particleOptions = {
-//         friction: 0.05,
-//         frictionStatic: 0.1,
-//         render: {visible: true}
-//     };
-//
-//     Composite.add(world, [
-//         // see softBody function defined later in this file
-//         ooze(250, 100, 10, 15, 0, 0, true, 10, particleOptions),
-//     ]);
+        Composite.add(world, [
+            // walls
+            Bodies.rectangle(400, -50, 2000, 300, {isStatic: true}),
+            Bodies.rectangle(400, 700, 2000, 300, {isStatic: true}),
+            Bodies.rectangle(1380, 300, 300, 800, {isStatic: true}),
+            Bodies.rectangle(-100, 300, 300, 800, {isStatic: true})
+        ]);
 
 // add all of the bodies to the world
-    Composite.add(engine.world, [boxA, ragdoll]);
+    Composite.add(engine.world, [boxA,]);
 
 
 // run the renderer
