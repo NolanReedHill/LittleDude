@@ -163,10 +163,12 @@ function initPhysics() {
             },
             label: "box"
         };
-        foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
+        var foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
         Composite.add(world, foodPiece);
+        setTimeout(function(){ Composite.remove(world, foodPiece) }, 1000)
     }
-// keep the mouse in sync with rendering
+
+    // keep the mouse in sync with rendering
     render.mouse = mouse;
     function randomIntFromInterval(min, max) { // min and max included
       return Math.floor(Math.random() * (max - min + 1) + min);
