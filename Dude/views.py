@@ -29,7 +29,16 @@ def main_page(request):
     user = request.user
 
     if user.is_authenticated:
-        return render(request, "home.html")
+        littleDude = LittleDude.objects.filter(user_id=user.id).first()
+        timeDifference = 0
+        if not littleDude == None:
+            lastVisit = littleDude.lastVisit
+            lastVisit = lastVisit.replace(tzinfo=None)
+            curTime = datetime.now()
+            timeDifference = curTime - lastVisit
+            timeDifference = timeDifference.days
+
+        return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
     else:
          return HttpResponseRedirect(
                 reverse("index"))
@@ -51,13 +60,13 @@ def habitat(request):
     lastVisit = littleDude.lastVisit
     lastVisit = lastVisit.replace(tzinfo=None)
     timeDifference = currentTime - lastVisit
-    if timeDifference.seconds >= 1800 and timeDifference.seconds < 3600:
+    if timeDifference.seconds >= 86400 and timeDifference.seconds < 259200:
         littleDude.hunger = "Peckish"
         littleDude.save()
-    elif timeDifference.seconds > 3600 and timeDifference.seconds < 7200:
+    elif timeDifference.seconds > 259200 and timeDifference.seconds < 604800:
         littleDude.hunger = "Starving"
         littleDude.save()
-    elif timeDifference.seconds > 7200:
+    elif timeDifference.seconds > 604800:
         littleDude.hunger = "Dead"
         littleDude.save()
     littleDude.lastVisit = currentTime
@@ -83,6 +92,8 @@ def death(request):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    if not littleDude.hunger == "Dead":
+        return HttpResponseRedirect(reverse("index"))
     deadName = littleDude.name
     littleDude.delete()
     return render(request, "death.html", {"deadName": deadName})
@@ -225,10 +236,6 @@ def levelUp(request, steps):
     littleDude.save()
     return HttpResponseRedirect(reverse("habitat"))
 
-    
-
-
-
 # Create your views here.
 def draw(request):
     # redirect to habitat
@@ -240,4 +247,18 @@ def draw(request):
 
 def physics(request):
     return render(request, "physics.html")
+
+def feed(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    if littleDude.hunger == "Peckish":
+        littleDude.hunger = "None"
+        littleDude.save()
+    elif littleDude.hunger == "Starving":
+        littleDude.hunger = "Peckish"
+        littleDude.save()
+    return HttpResponse(200)
 

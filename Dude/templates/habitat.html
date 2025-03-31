@@ -25,27 +25,17 @@
     {% load static %}
     <script src="{% static 'js/habitat.js' %}"></script>
     <input type="hidden" id="littleDudeType" value="{{ littleDude.type }}" />
-<!--    {% if is_biped %}-->
-<!--    <script type="text/javascript">-->
-<!--        var creatureType = "Biped"-->
-<!--    </script>-->
-<!--    {% elif is_quadraped %}-->
-<!--    <script type="text/javascript">-->
-<!--        var creatureType = "Quadraped"-->
-<!--    </script>-->
-<!--    {% elif is_ooze %}-->
-<!--    <script type="text/javascript">-->
-<!--        var creatureType = "Ooze"-->
-<!--    </script>-->
-<!--    {% endif %}-->
     <body onload="initPhysics()">
+      <a href="{% url 'index' %}" style="color: white;">
+        <h1 style="position: absolute; margin-left: 10px; margin-top: 10px; background-color: blue; border-radius: 8%; color: white;">LittleDude</h1>
+      </a>
         <h1 style="width: fit-content; margin: auto;">{{ littleDude.name }}'s Habitat</h1>
         <h2 style="width: fit-content; margin: auto;">Level {{littleDude.level}}</h2>
 
-        <h1 id="response"></h1>
+        <h1 id="response" style="text-align: center;"></h1>
           <div id="renderArea"></div>
 
-          <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 4vh;">
+          <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 4vh; margin-bottom: 20px;">
             <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt" style="width: 50%;">
             <button class="btn btn-success" id="submitQuery" style="width: fit-content; margin-left: 10px;">Chat</button>
             <button class="btn btn-info" id="feedButton" onclick="dropFood()" style="width: fit-content; margin-left: 10px;">Feed </button>

@@ -22,4 +22,5 @@ urlpatterns = [
     path("on-walk", views.onWalk, name="on-walk"),
     path("call-back", views.callBack, name="call-back"),
     path("draw", views.draw, name="draw"),
+    path("feed", views.feed, name="feed"),
 ]
