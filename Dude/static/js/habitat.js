@@ -18,6 +18,7 @@ function initPhysics() {
 // create an engine
      engine = Engine.create();
      world = engine.world;
+
 // create a renderer
     var render = Render.create({
         element: document.getElementById("renderArea"),
@@ -81,7 +82,7 @@ function initPhysics() {
     Matter.Events.on(engine, "afterUpdate", function(event) {
         var engine = event.source;
 
-        if (Common.now() - lastTime >= 5000) {
+        if (Common.now() - lastTime >= 3500) {
             moveCreature(engine);
 
             lastTime = Common.now();
@@ -155,8 +156,13 @@ function initPhysics() {
 
     const feedButton = document.getElementById("feedButton");
     feedButton.onclick = function(event) {
-        xpos = randomIntFromInterval(150, 1100)
-        ypos = randomIntFromInterval(100, 300)
+        const response = fetch("feed", {
+            method: "GET",
+        })
+        .catch(error => console.error("Error:", error));
+        
+        xpos = randomIntFromInterval(150, 1100);
+        ypos = randomIntFromInterval(100, 300);
         foodOptions = {
             render: {
                 fillStyle: 'brown'
@@ -165,7 +171,7 @@ function initPhysics() {
         };
         var foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
         Composite.add(world, foodPiece);
-        setTimeout(function(){ Composite.remove(world, foodPiece) }, 1000)
+        setTimeout(function(){ Composite.remove(world, foodPiece) }, 700);
     }
 
     // keep the mouse in sync with rendering
@@ -799,7 +805,6 @@ function quadruped(x, y, scale, options) {
         ]
     });
 
-
     Composite.rotate(person, 90, {x, y})
     return person;
 }
@@ -824,8 +829,8 @@ function ooze(xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadi
 }
 
 function dropFood() {
-    xpos = randomIntFromInterval(150, 1100)
-    ypos = randomIntFromInterval(100, 300)
+    xpos = randomIntFromInterval(150, 1100);
+    ypos = randomIntFromInterval(100, 300);
 //        foodOptions = {
 //            render: {
 //                fillStyle: 'brown'

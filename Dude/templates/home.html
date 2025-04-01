@@ -6,6 +6,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+        <title>LittleDude-Home</title>
     </head>
     <body>
         <div class="row justify-content-center">
@@ -19,7 +20,20 @@
                 <a href="{% url 'habitat' %}" class="btn btn-primary button" style="margin: auto;">Play</a>
                 <a href="{% url 'account_logout' %}" class="btn btn-primary button">Logout</a>
             </div>
-           
         </div> 
+        <div class="row justify-content-center" style="margin-top: 50px;">
+            <h2 style="text-align: center;">Hello {{user.username}}!</h2>
+
+            {% if not littleDude == None and not littleDude.hunger == "dead" %}
+            <h3 style="text-align: center;">{{littleDude.name}} Is dying to see you.</h3>
+            <h3 style="text-align: center;">It's been {{timeDifference}} days since your last visit.</h3>
+            {% if littleDude.hunger == "Peckish" %}
+            <h3 style="text-align: center;">{{littleDude.name}} is feeling a little hungry. Maybe give them some food!</h3>
+            {% endif %}
+            {% if littleDude.hunger == "Starving" %}
+            <h3 style="text-align: center;">{{littleDude.name}} is pretty hungry. You should definitely give them some food!</h3>
+            {% endif %} 
+            {% endif %}
+        </div>
     </body>
 </html>

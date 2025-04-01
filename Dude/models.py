@@ -38,6 +38,7 @@ class LittleDude(models.Model):
     personality = models.CharField(max_length=40, choices=PERSONALITIES, default="Bubbly")
     hunger = models.CharField(max_length=40, choices=HUNGER, default="None")
     lastVisit = models.DateTimeField(default=datetime.now())
+    lastFeeding = models.DateTimeField(default=datetime.now())
     onWalk = models.BooleanField(default=False)
 
 class CreateLittleDudeForm(forms.ModelForm):
