@@ -179,7 +179,11 @@ def sendData(request):
     user = request.user
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
-    ser = serial.Serial('COM3', 9600, timeout=1)
+    try:
+        ser = serial.Serial('COM3', 9600, timeout=1)
+    except serial.SerialException:
+        # send some kind of error message
+        return HttpResponseRedirect(reverse("habitat"))
     time.sleep(2)
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
     data = {"name": littleDude.name}
@@ -203,7 +207,11 @@ def callBack(request):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
     
-    ser = serial.Serial('COM3', 9600, timeout=1)
+    try:
+        ser = serial.Serial('COM3', 9600, timeout=1)
+    except serial.SerialException:
+        # send some kind of error message
+        return HttpResponseRedirect(reverse("habitat"))
     time.sleep(5)
     line = ser.readline().decode('utf-8').strip()
 
