@@ -15,7 +15,6 @@ import serial
 import time
 
 load_dotenv()
-client = genai.Client(api_key=os.environ.get("GENAI_SECRET"))
 
 #landing page
 def index(request):
@@ -37,7 +36,7 @@ def main_page(request):
             curTime = datetime.now()
             timeDifference = curTime - lastVisit
             timeDifference = timeDifference.days
-
+        #need to update hunger here ################
         return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
     else:
          return HttpResponseRedirect(
@@ -60,13 +59,14 @@ def habitat(request):
     lastFeeding = littleDude.lastFeeding
     lastFeeding = lastFeeding.replace(tzinfo=None)
     timeDifference = currentTime - lastFeeding
-    if timeDifference.seconds >= 86400 and timeDifference.seconds < 259200:
+    timeDifference = timeDifference.total_seconds()
+    if timeDifference >= 86400 and timeDifference < 259200:
         littleDude.hunger = "Peckish"
         littleDude.save()
-    elif timeDifference.seconds > 259200 and timeDifference.seconds < 604800:
+    elif timeDifference > 259200 and timeDifference < 604800:
         littleDude.hunger = "Starving"
         littleDude.save()
-    elif timeDifference.seconds > 604800:
+    elif timeDifference > 604800:
         littleDude.hunger = "Dead"
         littleDude.save()
     littleDude.lastVisit = currentTime
@@ -74,7 +74,8 @@ def habitat(request):
     #add death functionality
     if littleDude.hunger == "Dead":
         return HttpResponseRedirect(reverse("death"))
-    return render(request, "habitat.html", {"littleDude": littleDude})
+
+    return render(request, "habitat.html", {"littleDude": littleDude,})
 
 def is_biped(user):
     print("help")
@@ -121,13 +122,24 @@ def submitQuery(request):
     user = request.user
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
+    littleDude = LittleDude.objects.filter(user_id=user.id).first()
+    if not littleDude:
+        return HttpResponseRedirect(reverse("home"))
     if request.method == "POST":
         data = json.loads(request.body)
         prompt = data.get("prompt", "")
         systemInstruction = generateQueryParameters(request)
+        #getting chat history
+        chatHistory = littleDude.chatHistory
+        chatHistory+= "\n"+user.username+" said: "+prompt
+        #creating chat client
+        client = genai.Client(api_key=os.environ.get("GENAI_SECRET"))
         chat = client.chats.create( model="gemini-2.0-flash", config=types.GenerateContentConfig(
         system_instruction=systemInstruction),)
-        response = chat.send_message(prompt)
+        response = chat.send_message(chatHistory)
+        chatHistory+= "\n"+"You said: "+response.text
+        littleDude.chatHistory = chatHistory
+        littleDude.save()
         return JsonResponse(response.text, safe=False)
 
 def generateQueryParameters(request):
@@ -156,6 +168,14 @@ def generateQueryParameters(request):
         parameters+= "You are very hungry. Make sure to mention it."
     else:
         parameters+= "You are not hungry. You were fed recently."
+    
+    lastVisit = littleDude.lastVisit
+    lastVisit = lastVisit.replace(tzinfo=None)
+    curTime = datetime.now()
+    timeDifference = curTime - lastVisit
+    timeDifference = timeDifference.days
+    if timeDifference > 0:
+        parameters+= "It's been "+timeDifference+" days since "+user.username+" last visited."
     return parameters
 
 def retire(request):

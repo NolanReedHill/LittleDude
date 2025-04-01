@@ -40,6 +40,7 @@ class LittleDude(models.Model):
     lastVisit = models.DateTimeField(default=datetime.now())
     lastFeeding = models.DateTimeField(default=datetime.now())
     onWalk = models.BooleanField(default=False)
+    chatHistory = models.TextField(default="Chat History: \n")
 
 class CreateLittleDudeForm(forms.ModelForm):
     class Meta:

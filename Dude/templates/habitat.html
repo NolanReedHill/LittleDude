@@ -94,6 +94,7 @@
             let button = document.getElementById("submitQuery");
             button.addEventListener("click", function () {
                 let prompt = document.getElementById("prompt").value;
+                let chat = '{{ chat }}';
                 if(prompt === "") return;
                 document.getElementById("prompt").value = "";
                 const response = fetch("submit-query", {
@@ -101,7 +102,7 @@
                     headers: {
                     "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ prompt: prompt,})
+                    body: JSON.stringify({ prompt: prompt, chat: chat})
                 })
                     .then(response => response.json())
                     .then(data => {
