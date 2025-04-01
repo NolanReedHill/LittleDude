@@ -6,6 +6,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+        <title>{{littleDude.name}}'s Habitat</title>
     </head>
     <style>
         #renderArea {
@@ -19,6 +20,10 @@
 
         #response {
            min-height: 5vh;
+        }
+
+        body {
+          overflow-x: auto;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js" integrity="sha512-3CP+e7z5ieYYTIyvRvV3eGVYR67yXg5V2mWfg8pEJJd2mlh8tG/cnDv5scTmRztEYHTksBlpPOmxFOiMtHfZdQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

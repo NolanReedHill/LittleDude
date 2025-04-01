@@ -57,9 +57,9 @@ def habitat(request):
     if littleDude.onWalk == True:
         return HttpResponseRedirect(reverse("on-walk"))
     currentTime = datetime.now()
-    lastVisit = littleDude.lastVisit
-    lastVisit = lastVisit.replace(tzinfo=None)
-    timeDifference = currentTime - lastVisit
+    lastFeeding = littleDude.lastFeeding
+    lastFeeding = lastFeeding.replace(tzinfo=None)
+    timeDifference = currentTime - lastFeeding
     if timeDifference.seconds >= 86400 and timeDifference.seconds < 259200:
         littleDude.hunger = "Peckish"
         littleDude.save()
@@ -254,11 +254,9 @@ def feed(request):
         return HttpResponseRedirect(reverse("index"))
     
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
-    if littleDude.hunger == "Peckish":
+    if not littleDude.hunger == "Dead":
         littleDude.hunger = "None"
-        littleDude.save()
-    elif littleDude.hunger == "Starving":
-        littleDude.hunger = "Peckish"
+        littleDude.lastFeeding = datetime.now()
         littleDude.save()
     return HttpResponse(200)
 

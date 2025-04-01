@@ -6,6 +6,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="{% static 'styles/index.css' %}" type="text/css" />
+        <title>LittleDude</title>
     </head>
     <body>
        <div class="row">
@@ -19,6 +20,12 @@
                 <a href="{% url 'account_signup' %}" class="btn btn-success button">Sign Up</a>
                 <a href="{% url 'account_login' %}" class="btn btn-success button">Log In</a>
             </div>
+        </div>
+        <div class="row justify-content-center" style="margin-top: 40px;">
+            <div style="width: fit-content; margin: auto;">
+                <img src="{% static 'images/waving_biped.png' %}" class="waving-image">
+            </div>
+            
         </div>
         
     </body>

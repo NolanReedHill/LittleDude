@@ -171,7 +171,7 @@ function initPhysics() {
         };
         var foodPiece = Bodies.rectangle(xpos, ypos, 40, 40, foodOptions);
         Composite.add(world, foodPiece);
-        setTimeout(function(){ Composite.remove(world, foodPiece) }, 1000);
+        setTimeout(function(){ Composite.remove(world, foodPiece) }, 700);
     }
 
     // keep the mouse in sync with rendering
