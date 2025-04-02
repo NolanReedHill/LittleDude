@@ -51,8 +51,13 @@
             </script>
           </div>
         </div>
-          <h1 id="response" style="text-align: center; margin-top: 15px;"></h1>
-          <div id="renderArea"></div>
+          <div class="response-area" id="response-area" hidden>
+            <div class="response-area-inner">
+              <p id="response" class="response"></p>
+            </div>
+          </div>
+          <div id="renderArea">
+          </div>
 
           <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 4vh; margin-bottom: 20px;">
             <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt" style="width: 50%;">
@@ -122,6 +127,11 @@
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById("response").innerText = data || "No response";
+                        document.getElementById("response-area").hidden = false;
+
+                        setTimeout(() => {
+                          document.getElementById("response-area").hidden = true;
+                        }, 8000);
                         })
                 .catch(error => console.error("Error:", error));
             });
