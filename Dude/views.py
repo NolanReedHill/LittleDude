@@ -36,7 +36,21 @@ def main_page(request):
             curTime = datetime.now()
             timeDifference = curTime - lastVisit
             timeDifference = timeDifference.days
-        #need to update hunger here ################
+            #need to update hunger here ################
+            lastFeeding = littleDude.lastFeeding
+            lastFeeding = lastFeeding.replace(tzinfo=None)
+            timeDifferenceFeeding = curTime - lastFeeding
+            timeDifferenceFeeding = timeDifferenceFeeding.total_seconds()
+            print(lastFeeding)
+            if timeDifferenceFeeding >= 86400 and timeDifferenceFeeding < 259200:
+                littleDude.hunger = "Peckish"
+                littleDude.save()
+            elif timeDifferenceFeeding > 259200 and timeDifferenceFeeding < 604800:
+                littleDude.hunger = "Starving"
+                littleDude.save()
+            elif timeDifferenceFeeding > 604800:
+                littleDude.hunger = "Dead"
+                littleDude.save()
         return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
     else:
          return HttpResponseRedirect(
@@ -56,19 +70,6 @@ def habitat(request):
     if littleDude.onWalk == True:
         return HttpResponseRedirect(reverse("on-walk"))
     currentTime = datetime.now()
-    lastFeeding = littleDude.lastFeeding
-    lastFeeding = lastFeeding.replace(tzinfo=None)
-    timeDifference = currentTime - lastFeeding
-    timeDifference = timeDifference.total_seconds()
-    if timeDifference >= 86400 and timeDifference < 259200:
-        littleDude.hunger = "Peckish"
-        littleDude.save()
-    elif timeDifference > 259200 and timeDifference < 604800:
-        littleDude.hunger = "Starving"
-        littleDude.save()
-    elif timeDifference > 604800:
-        littleDude.hunger = "Dead"
-        littleDude.save()
     littleDude.lastVisit = currentTime
     littleDude.save()
     #add death functionality
