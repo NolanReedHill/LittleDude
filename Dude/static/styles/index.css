@@ -28,3 +28,16 @@ p {
 h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
+
+.xp-bar-background {
+    background-color: gray;
+    height: 15px;
+    margin: auto;
+    margin-top: 10px;
+    border: solid;
+}
+
+.xp-bar-foreground {
+    height: 9px;
+    background-color: greenyellow;
+}
