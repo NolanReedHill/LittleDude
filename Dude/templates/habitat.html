@@ -126,7 +126,17 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById("response-area").hidden = false;
+                        let responseArea = document.getElementById("response-area");
+                        responseArea.style.opacity = "0%";
+                        responseArea.hidden = false;
+                        var opacity = 1;
+                        var fadeIn = setInterval(()=> {
+                          responseArea.style.opacity = opacity + "%";
+                          opacity++;
+                          if(opacity > 100) {
+                            clearInterval(fadeIn);
+                          }
+                        }, 3);
                         let textBox = document.getElementById("response");
                         textBox.innerText = "";
                         let response = data || "No Response";
@@ -139,11 +149,16 @@
                           if(i >= response.length) {
                             clearInterval(interval);
                             setTimeout(() => {
-                            document.getElementById("response-area").hidden = true;
+                            var fadeOut = setInterval(() => {
+                              responseArea.style.opacity = opacity + "%";
+                              opacity--;
+                              if(opacity < 0) {
+                                clearInterval(fadeOut);
+                                responseArea.hidden = true;
+                              }
+                            }, 3);
                             }, 8000);
                           } 
-
-                          
                         },30);
                         })
                 .catch(error => console.error("Error:", error));
