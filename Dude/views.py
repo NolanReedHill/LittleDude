@@ -137,7 +137,7 @@ def submitQuery(request):
         client = genai.Client(api_key=os.environ.get("GENAI_SECRET"))
         chat = client.chats.create( model="gemini-2.0-flash", config=types.GenerateContentConfig(
         system_instruction=systemInstruction,
-        max_output_tokens=400,
+        max_output_tokens=100,
         ),)
         response = chat.send_message(chatHistory)
         chatHistory+= "\n"+"You said: "+response.text

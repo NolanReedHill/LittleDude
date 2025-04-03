@@ -126,12 +126,25 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById("response").innerText = data || "No response";
                         document.getElementById("response-area").hidden = false;
+                        let textBox = document.getElementById("response");
+                        textBox.innerText = "";
+                        let response = data || "No Response";
+                        var i = 0;
+                        var interval = setInterval(()=> {
+                          if(response[i] !== "\n" || response[i] !== "\t") {
+                            textBox.innerText+= response[i];
+                          }
+                          i++;
+                          if(i >= response.length) {
+                            clearInterval(interval);
+                            setTimeout(() => {
+                            document.getElementById("response-area").hidden = true;
+                            }, 8000);
+                          } 
 
-                        setTimeout(() => {
-                          document.getElementById("response-area").hidden = true;
-                        }, 8000);
+                          
+                        },30);
                         })
                 .catch(error => console.error("Error:", error));
             });
