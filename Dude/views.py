@@ -13,6 +13,7 @@ from datetime import datetime
 from django.views import generic
 import serial
 import time
+import math
 
 load_dotenv()
 
@@ -35,13 +36,17 @@ def main_page(request):
             lastVisit = lastVisit.replace(tzinfo=None)
             curTime = datetime.now()
             timeDifference = curTime - lastVisit
+            timeDifferenceHours = timeDifference.total_seconds()
+            timeDifferenceHours = timeDifferenceHours / 3600
+            timeDifferenceHours = math.floor(timeDifferenceHours)
             timeDifference = timeDifference.days
-            #need to update hunger here ################
+            #give xp for time spent away
+            levelUp(request, timeDifferenceHours)
+            #update hunger
             lastFeeding = littleDude.lastFeeding
             lastFeeding = lastFeeding.replace(tzinfo=None)
             timeDifferenceFeeding = curTime - lastFeeding
             timeDifferenceFeeding = timeDifferenceFeeding.total_seconds()
-            print(lastFeeding)
             if timeDifferenceFeeding >= 86400 and timeDifferenceFeeding < 259200:
                 littleDude.hunger = "Peckish"
                 littleDude.save()
@@ -51,7 +56,7 @@ def main_page(request):
             elif timeDifferenceFeeding > 604800:
                 littleDude.hunger = "Dead"
                 littleDude.save()
-        return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
+            return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
     else:
          return HttpResponseRedirect(
                 reverse("index"))
@@ -249,10 +254,13 @@ def callBack(request):
     littleDude.save()
     return levelUp(request, steps)
 
-def levelUp(request, steps):
+def levelUp(request, steps=False, xp=False):
     user = request.user
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
-    newXp = steps * 2
+    if steps:
+        newXp = steps * 2
+    elif xp:
+        newXp = xp
     curXp = littleDude.xp
     curXp+= newXp
     nextLevel = littleDude.xpToNextLevel
