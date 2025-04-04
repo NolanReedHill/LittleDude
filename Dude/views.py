@@ -41,7 +41,8 @@ def main_page(request):
             timeDifferenceHours = math.floor(timeDifferenceHours)
             timeDifference = timeDifference.days
             #give xp for time spent away
-            levelUp(request, timeDifferenceHours)
+            xp = timeDifferenceHours
+            levelUp(request, xp=xp)
             #update hunger
             lastFeeding = littleDude.lastFeeding
             lastFeeding = lastFeeding.replace(tzinfo=None)
@@ -56,7 +57,7 @@ def main_page(request):
             elif timeDifferenceFeeding > 604800:
                 littleDude.hunger = "Dead"
                 littleDude.save()
-            return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference})
+            return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference, "xp": xp})
     else:
          return HttpResponseRedirect(
                 reverse("index"))
@@ -254,12 +255,12 @@ def callBack(request):
     littleDude.save()
     return levelUp(request, steps)
 
-def levelUp(request, steps=False, xp=False):
+def levelUp(request, steps=-1, xp=-1):
     user = request.user
     littleDude = LittleDude.objects.filter(user_id=user.id).first()
-    if steps:
+    if steps != -1:
         newXp = steps * 2
-    elif xp:
+    elif xp != -1:
         newXp = xp
     curXp = littleDude.xp
     curXp+= newXp
