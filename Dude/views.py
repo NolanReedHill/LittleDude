@@ -58,8 +58,9 @@ def main_page(request):
                 littleDude.hunger = "Dead"
                 littleDude.save()
             return render(request, "home.html", {"user": user, "littleDude": littleDude, "timeDifference": timeDifference, "xp": xp})
+        return render(request, "home.html")
     else:
-         return HttpResponseRedirect(
+        return HttpResponseRedirect(
                 reverse("index"))
 
 def habitat(request):
