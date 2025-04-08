@@ -35,9 +35,29 @@
       </a>
         <h1 style="width: fit-content; margin: auto;">{{ littleDude.name }}'s Habitat</h1>
         <h2 style="width: fit-content; margin: auto;">Level {{littleDude.level}}</h2>
-
-        <h1 id="response" style="text-align: center;"></h1>
-          <div id="renderArea"></div>
+        <p style="margin-top: 10px;">{{littleDude.xp}}/{{littleDude.xpToNextLevel}}XP</p>
+        <div class="xp-bar">
+          <div class="col-md-4 xp-bar-background">
+            <div class="xp-bar-foreground" id="xp-bar-foreground"></div>
+            <input hidden value="{{littleDude.xp}}" id="xp">
+            <input hidden value="{{littleDude.xpToNextLevel}}" id="xp-to-next-level">
+            <!-- calculating percent of xp bar filled -->
+            <script>
+              let xpBar = document.getElementById("xp-bar-foreground");
+              let xp = document.getElementById("xp");
+              let xpToNextLevel = document.getElementById("xp-to-next-level");
+              let xpPercent = (xp.value / xpToNextLevel.value) * 100;
+              xpBar.style = "width: "+xpPercent+"%;";
+            </script>
+          </div>
+        </div>
+          <div class="response-area" id="response-area" hidden>
+            <div class="response-area-inner">
+              <p id="response" class="response"></p>
+            </div>
+          </div>
+          <div id="renderArea">
+          </div>
 
           <div class="row" style=" width: 50%; margin-left: 25%; margin-top: 4vh; margin-bottom: 20px;">
             <input type="text" name="prompt" placeholder="Talk to {{littleDude.name}}!" id="prompt" style="width: 50%;">
@@ -94,6 +114,7 @@
             let button = document.getElementById("submitQuery");
             button.addEventListener("click", function () {
                 let prompt = document.getElementById("prompt").value;
+                let chat = '{{ chat }}';
                 if(prompt === "") return;
                 document.getElementById("prompt").value = "";
                 const response = fetch("submit-query", {
@@ -101,11 +122,44 @@
                     headers: {
                     "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ prompt: prompt,})
+                    body: JSON.stringify({ prompt: prompt, chat: chat})
                 })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById("response").innerText = data || "No response";
+                        let responseArea = document.getElementById("response-area");
+                        responseArea.style.opacity = "0%";
+                        responseArea.hidden = false;
+                        var opacity = 1;
+                        var fadeIn = setInterval(()=> {
+                          responseArea.style.opacity = opacity + "%";
+                          opacity++;
+                          if(opacity > 100) {
+                            clearInterval(fadeIn);
+                          }
+                        }, 3);
+                        let textBox = document.getElementById("response");
+                        textBox.innerText = "";
+                        let response = data || "No Response";
+                        var i = 0;
+                        var interval = setInterval(()=> {
+                          if(response[i] !== "\n" || response[i] !== "\t") {
+                            textBox.innerText+= response[i];
+                          }
+                          i++;
+                          if(i >= response.length) {
+                            clearInterval(interval);
+                            setTimeout(() => {
+                            var fadeOut = setInterval(() => {
+                              responseArea.style.opacity = opacity + "%";
+                              opacity--;
+                              if(opacity < 0) {
+                                clearInterval(fadeOut);
+                                responseArea.hidden = true;
+                              }
+                            }, 3);
+                            }, 8000);
+                          } 
+                        },30);
                         })
                 .catch(error => console.error("Error:", error));
             });

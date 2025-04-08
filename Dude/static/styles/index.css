@@ -28,3 +28,43 @@ p {
 h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
+
+.xp-bar-background {
+    background-color: gray;
+    height: 15px;
+    margin: auto;
+    margin-top: 10px;
+    border: solid;
+}
+
+.xp-bar-foreground {
+    height: 9px;
+    background-color: greenyellow;
+}
+
+.response-area {
+    width: 60vw;
+    height: calc(400px - 15vw);
+    position: absolute;
+    left: 20vw;
+    top: 300px;
+}
+
+.response-area-inner {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    border-style: solid;
+    border-color: gray;
+    border-radius: 40%;
+    color:black;
+    
+}
+
+.response {
+    margin-top: calc(40px - 1vw);
+    width: 80%;
+    font-size: small;
+    font-weight: bold;
+    white-space: pre-wrap;
+}
